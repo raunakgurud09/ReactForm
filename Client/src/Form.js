@@ -11,43 +11,15 @@ function Form() {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const refreshToken = async () => {
-    try {
-      const res = await axios.post("/refresh", { token: user.refreshToken });
-      setUser({
-        ...user,
-        accessToken: res.data.accessToken,
-        refreshToken: res.data.refreshToken,
-      });
-      return res.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const axiosJWT = axios.create()
-
-  axiosJWT.interceptors.request.use(
-    async (config) => {
-      let currentDate = new Date();
-      const decodedToken = jwt_decode(user.accessToken);
-      if (decodedToken.exp * 1000 < currentDate.getTime()) {
-        const data = await refreshToken();
-        config.headers["authorization"] = "Bearer " + data.accessToken;
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+//   const auth = axios.create({
+//     baseURL:"http:localhost:3001/api/v1/"
+//   })
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/login", { username, password });
+      const res = await axios.post("http://localhost:3001/api/v1/login", { username, password });
       setUser(res.data);
-      console.log(user);
     } catch (err) {
       console.log(err);
     }
@@ -57,10 +29,7 @@ function Form() {
     setSuccess(false);
     setError(false);
     try {
-      await axiosJWT.delete("/users/" + id, {
-        headers: { authorization: "Bearer " + user.accessToken },
-      });
-      setSuccess(true);
+      //api call
     } catch (err) {
       setError(true);
     }
@@ -99,11 +68,13 @@ function Form() {
             <input
               type="text"
               placeholder="username"
+            //   value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
               type="password"
               placeholder="password"
+            //   value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
             <button type="submit" className="submitButton">
