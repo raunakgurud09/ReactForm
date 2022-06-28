@@ -12,7 +12,7 @@ function Form() {
 
   const refreshToken = async () => {
     try {
-      const res = await axios.post("/refresh", { token: user.refreshToken });
+      const res = await axios.post("http://localhost:3001/api/v1/refresh", { token: user.refreshToken });
       setUser({
         ...user,
         accessToken: res.data.accessToken,

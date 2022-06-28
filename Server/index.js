@@ -51,7 +51,7 @@ app.post("/api/v1/refresh", (req, res) => {
 
 const GenrateAccessToken = (user) => {
   return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "mySecretKey", {
-    expiresIn: "20s",
+    expiresIn: "5s",
   });
 };
 
@@ -59,7 +59,6 @@ const GenrateRefreshToken = (user) => {
   return jwt.sign(
     { id: user.id, isAdmin: user.isAdmin },
     "myRefreshSecretKey",
-    { expiresIn: "60s" }
   );
 };
 
